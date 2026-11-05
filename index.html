@@ -1,0 +1,852 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121417" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Conseil">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root{color-scheme:light; padding-top:env(safe-area-inset-top, 0px); padding-bottom:env(safe-area-inset-bottom, 0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none !important}
+</style>
+<title>Sauveterre Conseil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;600;700&display=swap">
+<style>
+/* Layout : une colonne d'appli mobile (540px max) sous un bandeau de maquette ; une couleur pleine par rubrique ; navigation fixe en bas */
+:root{
+  /* Palette Google Agenda : mêmes teintes dans les deux thèmes */
+  --k-basilic:#3B7D47; --k-menthe:#5AB57A; --k-eucalyptus:#3F9488; --k-paon:#4299E1; --k-cobalt:#4F86EE;
+  --k-lavande:#7F87C9; --k-myrtille:#4651B2; --k-glycine:#B09FDA; --k-amethyste:#9C6CB0; --k-raisin:#8C2DA6;
+  --k-cacao:#7A5547; --k-magenta:#A42356; --k-vieuxrose:#D23360; --k-flamant:#DB7F76; --k-tomate:#C9281F;
+  --k-mandarine:#E6593A; --k-citrouille:#E3742A; --k-mangue:#E99A35; --k-banane:#F0C04B; --k-citron:#DFC45E; --k-avocat:#C1CA4F;
+  --bg:#F4F5F7; --surface:#FFFFFF; --surface-2:#E8EAEE; --ink:#1B1F24; --muted:#58606A; --line:#D8DBE0; --line-strong:#9AA1AA;
+  --focus:#1A56DB;
+  /* Vignettes : Bleu paon, Basilic, Citrouille et Myrtille, assombris juste assez pour le texte blanc */
+  --agenda:#2F7BC0; --msg:#3B7D47; --docs:#C25A12; --admin:#4651B2;
+  --agenda-soft:color-mix(in srgb, var(--agenda) 14%, var(--surface)); --agenda-text:color-mix(in srgb, var(--agenda) 62%, var(--ink));
+  --msg-soft:color-mix(in srgb, var(--msg) 14%, var(--surface)); --msg-text:color-mix(in srgb, var(--msg) 62%, var(--ink));
+  --docs-soft:color-mix(in srgb, var(--docs) 14%, var(--surface)); --docs-text:color-mix(in srgb, var(--docs) 62%, var(--ink));
+  --admin-soft:color-mix(in srgb, var(--admin) 14%, var(--surface)); --admin-text:color-mix(in srgb, var(--admin) 62%, var(--ink));
+  --on-tile:#FFFFFF; --alert:#C9281F; --on-alert:#FFFFFF;
+  --font-display:"Lexend","Atkinson Hyperlegible",system-ui,sans-serif;
+  --font-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121417; --surface:#1C1F23; --surface-2:#272B30; --ink:#ECEEF1; --muted:#A4ABB4; --line:#30353B; --line-strong:#5C636B;
+    --focus:#8FB2FF;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121417; --surface:#1C1F23; --surface-2:#272B30; --ink:#ECEEF1; --muted:#A4ABB4; --line:#30353B; --line-strong:#5C636B;
+  --focus:#8FB2FF;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{font-size:17px}
+html.big{font-size:20px}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:1rem; line-height:1.45;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 calc(100px + env(safe-area-inset-bottom, 0px));
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:540px; margin-inline:auto}
+button,select,input,textarea{font:inherit; color:inherit}
+:focus-visible{outline:3px solid var(--focus); outline-offset:2px}
+h1,h2,h3{font-family:var(--font-display); text-wrap:balance; margin:0; letter-spacing:-.01em}
+p{margin:0}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap}
+.muted{color:var(--muted)} .small{font-size:.86rem; display:block}
+
+.s-home{--sec:var(--ink); --sec-soft:var(--surface-2); --sec-text:var(--ink)}
+.s-agenda{--sec:var(--agenda); --sec-soft:var(--agenda-soft); --sec-text:var(--agenda-text)}
+.s-msg{--sec:var(--msg); --sec-soft:var(--msg-soft); --sec-text:var(--msg-text)}
+.s-docs{--sec:var(--docs); --sec-soft:var(--docs-soft); --sec-text:var(--docs-text)}
+.s-admin{--sec:var(--admin); --sec-soft:var(--admin-soft); --sec-text:var(--admin-text)}
+
+/* Bandeau de maquette : hors de l'appli */
+.mock{margin-block:12px 2px; padding:10px 12px 12px; border:1.5px dashed var(--line-strong); border-radius:14px; background:var(--surface-2)}
+.mock-label{display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 10px; font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.who{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:6px; margin-top:8px}
+@media (min-width:520px){.who{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.who button{border:1.5px solid var(--line); background:var(--surface); border-radius:10px; padding:6px 10px; text-align:left; cursor:pointer; min-height:46px}
+.who button[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.who b{display:block; font-size:.88rem}
+.who span{display:block; font-size:.74rem; opacity:.8}
+.mock-note{font-size:.82rem; color:var(--muted); margin:8px 2px 0}
+
+/* En-tête de l'appli */
+.top{display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding-block:18px 12px}
+.place-line{font-size:.74rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.hello{font-family:var(--font-display); font-size:1.75rem; font-weight:700; line-height:1.15; margin-top:2px}
+.meta-line{display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; margin-top:6px; color:var(--muted); font-size:.92rem}
+.role{padding:3px 10px; border-radius:999px; background:var(--surface-2); color:var(--ink); font-weight:700; font-size:.8rem}
+.icon-btn{width:48px; height:48px; flex:none; border-radius:14px; border:1.5px solid var(--line); background:var(--surface); display:grid; place-items:center; cursor:pointer; font-family:var(--font-display); font-weight:700; font-size:1.05rem}
+.icon-btn svg{width:22px; height:22px}
+
+.view-head{display:flex; align-items:center; gap:12px; margin-block:6px 14px}
+.glyph{width:46px; height:46px; flex:none; border-radius:13px; display:grid; place-items:center; background:var(--sec); color:var(--on-tile)}
+.view-head h1{font-size:1.55rem}
+.lead{color:var(--muted); margin:-4px 0 14px}
+.eyebrow{font-family:var(--font-body); font-size:.76rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px}
+.grp{font-family:var(--font-display); font-size:1rem; font-weight:600; color:var(--muted); margin:20px 0 10px}
+.sub-h{font-size:1.2rem; margin:4px 0 12px}
+.list{display:grid; gap:10px}
+.empty{padding:18px; border:1.5px dashed var(--line); border-radius:14px; color:var(--muted); text-align:center}
+
+/* Accueil */
+.bands{display:grid; gap:12px; margin-top:16px}
+.band{display:flex; align-items:center; gap:14px; width:100%; min-height:94px; border:0; border-radius:var(--r); padding:16px 18px; background:var(--sec); color:var(--on-tile); text-align:left; cursor:pointer}
+.band .ico{width:50px; height:50px; flex:none; border-radius:14px; background:rgb(255 255 255 / .18); display:grid; place-items:center}
+.band .ico svg{width:28px; height:28px}
+.band .txt{flex:1; min-width:0}
+.band .lab{display:block; font-family:var(--font-display); font-weight:600; font-size:1.3rem; line-height:1.2}
+.band .sub{display:block; font-size:.93rem; opacity:.93}
+.band .num{font-family:var(--font-display); font-weight:700; font-size:2.4rem; line-height:1; font-variant-numeric:tabular-nums}
+.mine{margin-top:20px}
+
+/* Filtres */
+.chips{display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; margin-bottom:6px; scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none; min-height:42px; padding:0 14px; border-radius:999px; border:1.5px solid var(--line); background:var(--surface); font-weight:700; font-size:.9rem; cursor:pointer; display:inline-flex; align-items:center; gap:8px}
+.chip .dot{width:11px; height:11px; border-radius:50%; background:var(--c)}
+.chip[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.chip.sm{min-height:36px; padding:0 12px; font-size:.82rem}
+
+/* Rendez-vous */
+.ev{display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:14px}
+.day{width:66px; align-self:start; border-radius:14px; padding:8px 4px; text-align:center; background:color-mix(in srgb, var(--c) 18%, var(--surface)); color:color-mix(in srgb, var(--c) 50%, var(--ink))}
+.day .wd{font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em}
+.day .dn{font-family:var(--font-display); font-size:1.95rem; font-weight:700; line-height:1.05; font-variant-numeric:tabular-nums}
+.day .mo{font-size:.78rem; font-weight:700}
+.ev h3{font-size:1.15rem; line-height:1.25}
+.ev .what{margin:3px 0 10px}
+.facts{display:grid; gap:4px; font-size:.9rem; color:var(--muted)}
+.fact{display:flex; gap:7px; align-items:flex-start}
+.fact svg{width:17px; height:17px; flex:none; margin-top:2px}
+.rsvp{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+.pill-btn{min-height:46px; padding:0 16px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:6px}
+.pill-btn svg{width:18px; height:18px}
+.pill-btn.yes[aria-pressed="true"]{background:var(--msg); border-color:var(--msg); color:var(--on-tile)}
+.pill-btn.no[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--bg)}
+.link-btn{background:none; border:0; padding:0; min-height:44px; display:inline-flex; align-items:center; gap:6px; font-weight:700; color:var(--sec-text, var(--ink)); text-decoration:underline; text-underline-offset:3px; cursor:pointer}
+.link-btn svg{width:18px; height:18px}
+
+/* Messages */
+.chan{display:flex; align-items:center; gap:14px; width:100%; min-height:78px; text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:14px; cursor:pointer}
+.sq{width:50px; height:50px; flex:none; border-radius:14px; display:grid; place-items:center; font-family:var(--font-display); font-weight:700; font-size:1.05rem; background:color-mix(in srgb, var(--c) 18%, var(--surface)); color:color-mix(in srgb, var(--c) 50%, var(--ink))}
+.chan .txt{flex:1; min-width:0}
+.chan .nm{display:block; font-weight:700; font-size:1.05rem}
+.chan .pv{display:block; font-size:.88rem; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.badge{min-width:26px; height:26px; padding:0 8px; border-radius:999px; background:var(--alert); color:var(--on-alert); font-weight:700; font-size:.84rem; display:inline-grid; place-items:center; font-variant-numeric:tabular-nums; flex:none}
+body.calm .badge, body.calm .num{display:none}
+.thread-head{display:flex; align-items:center; gap:12px; margin-block:6px 12px}
+.thread-head h1{font-size:1.35rem}
+.vis{display:flex; align-items:center; gap:6px; font-size:.84rem; color:var(--muted)}
+.vis svg{width:16px; height:16px}
+.pinned{display:flex; gap:10px; align-items:flex-start; background:var(--msg-soft); border-radius:14px; padding:12px 14px}
+.pinned svg{width:20px; height:20px; flex:none; color:var(--msg-text); margin-top:2px}
+.pinned b{display:block; font-size:.74rem; letter-spacing:.08em; text-transform:uppercase; color:var(--msg-text)}
+.msgs{display:grid; gap:12px; margin-block:16px}
+.msg{display:grid; grid-template-columns:auto minmax(0,1fr); gap:10px; align-items:start}
+.av{width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:var(--surface-2); font-weight:700; font-size:.8rem}
+.bubble{background:var(--surface); border:1.5px solid var(--line); border-radius:4px 16px 16px 16px; padding:10px 12px}
+.msg.me .bubble{background:var(--msg-soft); border-color:var(--msg-soft)}
+.who-line{display:flex; flex-wrap:wrap; gap:4px 8px; font-size:.82rem; color:var(--muted); margin-bottom:2px}
+.who-line b{color:var(--ink)}
+.composer{position:sticky; bottom:calc(84px + env(safe-area-inset-bottom, 0px)); display:flex; gap:8px; align-items:flex-end; background:var(--bg); padding-block:10px}
+.composer textarea{flex:1; min-width:0; min-height:54px; max-height:160px; resize:none; border-radius:14px; border:1.5px solid var(--line); background:var(--surface); padding:14px 12px}
+.send{width:54px; height:54px; flex:none; border:0; border-radius:14px; background:var(--msg); color:var(--on-tile); display:grid; place-items:center; cursor:pointer}
+
+/* Documents */
+.search{display:flex; align-items:center; gap:8px; min-height:54px; padding:0 14px; margin-bottom:12px; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; color:var(--muted)}
+.search:focus-within{outline:3px solid var(--focus); outline-offset:2px}
+.search svg{width:20px; height:20px; flex:none}
+.search input{flex:1; min-width:0; min-height:50px; border:0; background:transparent; color:var(--ink); outline:none}
+.cats{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.cats .cat:last-child:nth-child(odd){grid-column:1 / -1}
+.cat{min-height:100px; border:0; border-radius:var(--r); padding:14px 16px; background:var(--docs-soft); color:var(--ink); text-align:left; cursor:pointer; display:flex; flex-direction:column; justify-content:space-between; gap:8px}
+.cat .n{font-family:var(--font-display); font-weight:700; font-size:1.9rem; line-height:1; color:var(--docs-text); font-variant-numeric:tabular-nums}
+.cat .l{font-weight:700}
+.docs{display:grid; gap:8px}
+.doc{display:flex; align-items:center; gap:12px; width:100%; min-height:70px; text-align:left; background:var(--surface); border:1.5px solid var(--line); border-radius:14px; padding:12px; cursor:pointer}
+.ft{width:44px; height:52px; flex:none; border-radius:8px; display:grid; place-items:center; background:var(--docs-soft); color:var(--docs-text); font-size:.7rem; font-weight:700; letter-spacing:.05em}
+.doc .txt{flex:1; min-width:0}
+.doc .t{display:block; font-weight:700; line-height:1.3}
+.doc .m{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin-top:4px; font-size:.84rem; color:var(--muted)}
+.new{padding:2px 8px; border-radius:6px; background:var(--docs-soft); color:var(--docs-text); font-size:.72rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase}
+
+/* Administration */
+.card{background:var(--surface); border:1.5px solid var(--line); border-radius:var(--r); padding:16px; display:grid; gap:14px}
+.card + .card{margin-top:14px}
+.card h2{font-size:1.15rem}
+.com-row{display:flex; flex-wrap:wrap; align-items:center; gap:10px 12px; padding-bottom:12px; border-bottom:1px solid var(--line)}
+.sw{width:30px; height:30px; flex:none; border-radius:9px; background:var(--c)}
+.com-row .txt{flex:1; min-width:140px}
+.com-row b{display:block}
+.acts{display:flex; gap:6px; margin-left:auto}
+.ghost{min-height:42px; padding:0 12px; border-radius:10px; border:1.5px solid var(--line); background:transparent; color:var(--ink); font-weight:700; cursor:pointer}
+.danger{min-height:42px; padding:0 12px; border-radius:10px; border:0; background:var(--alert); color:var(--on-alert); font-weight:700; cursor:pointer}
+.field label,.field .lbl{display:block; font-weight:700; margin-bottom:6px}
+.field input{width:100%; min-height:52px; padding:0 14px; border-radius:12px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink)}
+.hues{display:flex; flex-wrap:wrap; gap:8px}
+.hue{width:44px; height:44px; border-radius:12px; border:3px solid var(--surface); box-shadow:0 0 0 1.5px var(--line); background:var(--c); cursor:pointer}
+.hue[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+.primary{min-height:52px; padding:0 18px; border:0; border-radius:14px; background:var(--sec, var(--admin)); color:var(--on-tile); font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px}
+.primary svg{width:20px; height:20px}
+.err{color:var(--alert); font-weight:700; font-size:.92rem}
+.member{display:grid; gap:8px; padding-top:12px; border-top:1px solid var(--line)}
+.m-top{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
+.m-top .txt{flex:1; min-width:120px}
+.m-top b{display:block}
+.m-top select{margin-left:auto; min-height:44px; padding:0 10px; border-radius:10px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink)}
+.toggle-chips{display:flex; flex-wrap:wrap; gap:6px}
+.tbl-wrap{overflow-x:auto}
+table{width:100%; min-width:430px; border-collapse:collapse; font-size:.9rem}
+th,td{padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+th{font-size:.74rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted)}
+td.y{color:var(--msg-text); font-weight:700}
+td.n{color:var(--muted)}
+.note{background:var(--admin-soft); border-radius:12px; padding:12px 14px; font-size:.92rem}
+
+/* Navigation */
+.tabs{position:fixed; left:0; right:0; bottom:0; z-index:20; background:var(--surface); border-top:1.5px solid var(--line);
+  padding:8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.tabs-in{max-width:540px; margin-inline:auto; display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:4px}
+.tab{position:relative; min-height:62px; border:0; border-radius:14px; background:transparent; color:var(--muted); display:grid; justify-items:center; align-content:center; gap:3px; font-weight:700; font-size:.76rem; cursor:pointer}
+.tab svg{width:26px; height:26px}
+.tab[aria-current="page"]{background:var(--sec-soft); color:var(--sec-text)}
+.tab .badge{position:absolute; top:4px; left:calc(50% + 6px); min-width:20px; height:20px; padding:0 6px; font-size:.7rem}
+
+/* Feuilles et messages flash */
+.scrim{position:fixed; inset:0; z-index:30; background:rgb(0 0 0 / .45)}
+.sheet{position:fixed; left:0; right:0; bottom:0; z-index:31; max-height:86vh; overflow:auto; background:var(--surface); border-radius:22px 22px 0 0;
+  padding:14px max(16px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px))}
+.sheet-in{max-width:540px; margin-inline:auto; display:grid; gap:14px}
+.grab{width:46px; height:5px; border-radius:3px; background:var(--line); margin:0 auto}
+.sheet h2{font-size:1.3rem}
+.sheet-head{display:flex; gap:12px; align-items:center}
+.dl{display:grid; gap:8px; margin:0}
+.dl div{display:flex; justify-content:space-between; gap:12px; padding-bottom:8px; border-bottom:1px solid var(--line)}
+.dl dt{color:var(--muted)} .dl dd{margin:0; font-weight:700; text-align:right}
+.row{display:flex; flex-wrap:wrap; gap:10px}
+.sw-row{display:flex; justify-content:space-between; align-items:center; gap:12px; padding-block:10px; border-bottom:1px solid var(--line)}
+.switch{position:relative; width:60px; height:36px; flex:none; border:0; border-radius:999px; background:var(--line-strong); cursor:pointer}
+.switch::after{content:""; position:absolute; top:4px; left:4px; width:28px; height:28px; border-radius:50%; background:var(--surface); transition:left .15s}
+.switch[aria-checked="true"]{background:var(--msg)}
+.switch[aria-checked="true"]::after{left:28px}
+.toast{position:fixed; z-index:40; left:50%; transform:translateX(-50%); bottom:calc(96px + env(safe-area-inset-bottom, 0px)); max-width:min(480px, calc(100% - 32px)); padding:12px 16px; border-radius:12px; background:var(--ink); color:var(--bg); font-weight:700; text-align:center}
+body.calm *, body.calm *::after{transition:none !important}
+@media (prefers-reduced-motion: reduce){*,*::after{transition:none !important; animation:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="mock" id="mock" role="region" aria-label="Commandes de la maquette"></div>
+  <header class="top" id="top"></header>
+  <main id="view"></main>
+</div>
+<nav class="tabs" aria-label="Rubriques"><div class="tabs-in" id="tabs"></div></nav>
+<div class="scrim" id="scrim" data-act="close" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-t" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function(){
+const TODAY = new Date(2026, 10, 5);
+const WD = ['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+const WDS = ['dim.','lun.','mar.','mer.','jeu.','ven.','sam.'];
+const MO = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const MOS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+const PAL = [['basilic','Basilic'],['menthe','Menthe'],['eucalyptus','Eucalyptus'],['paon','Bleu paon'],['cobalt','Cobalt'],['lavande','Lavande'],['myrtille','Myrtille'],['glycine','Glycine'],['amethyste','Améthyste'],['raisin','Raisin'],['cacao','Cacao'],['magenta','Magenta'],['vieuxrose','Vieux rose'],['flamant','Flamant rose'],['tomate','Tomate'],['mandarine','Mandarine'],['citrouille','Citrouille'],['mangue','Mangue'],['banane','Banane'],['citron','Citron'],['avocat','Vert avocat']];
+const palName = k => (PAL.find(p => p[0] === k) || [k, k])[1];
+const cv = k => '--c:var(--k-' + k + ')';
+const CATS = [
+  {id:'seances', name:'Séances du conseil'},
+  {id:'budget', name:'Budget et finances'},
+  {id:'projets', name:'Projets et travaux'},
+  {id:'commissions', name:'Comptes rendus de commission'},
+  {id:'bureau', name:'Bureau'}
+];
+
+function svg(p){ return '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + p + '</svg>'; }
+const ic = {
+  home: svg('<path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/>'),
+  cal: svg('<rect x="3" y="4.5" width="18" height="16.5" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>'),
+  chat: svg('<path d="M4 5h16v11H9l-5 4z"/>'),
+  doc: svg('<path d="M6 2.5h8l5 5v14H6z"/><path d="M14 2.5v5h5M9 13h7M9 17h7"/>'),
+  admin: svg('<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>'),
+  back: svg('<path d="M15 5l-7 7 7 7"/>'),
+  pin: svg('<path d="M12 21v-6M7.5 4h9L15 9.5l3 3H6l3-3z"/>'),
+  place: svg('<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>'),
+  clock: svg('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  eye: svg('<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
+  search: svg('<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>'),
+  check: svg('<path d="M5 12.5l4.5 4.5L19 7"/>'),
+  send: svg('<path d="M4 12 20 4l-6 16-3-7z"/>'),
+  plus: svg('<path d="M12 5v14M5 12h14"/>')
+};
+
+const S = {
+  me:'marc', tab:'home', filter:'moi', chan:null, docCat:null, q:'', calm:false, big:false,
+  newK:'cobalt', newName:'', err:'', confirmDel:null,
+  commissions:[
+    {id:'fin', name:'Finances', k:'basilic'},
+    {id:'urb', name:'Urbanisme et travaux', k:'citrouille'},
+    {id:'eco', name:'Économie et commerces', k:'mangue'},
+    {id:'ener', name:'Transition énergétique', k:'eucalyptus'},
+    {id:'ecole', name:'École et restauration', k:'paon'},
+    {id:'soli', name:'Solidarités', k:'vieuxrose'},
+    {id:'cult', name:'Culture et festivités', k:'amethyste'}
+  ],
+  members:[
+    {id:'helene', name:'Hélène Martin', role:'maire', f:true, coms:[]},
+    {id:'sophie', name:'Sophie Durand', role:'adjoint', f:true, deleg:'Urbanisme', coms:['urb','ener']},
+    {id:'marc', name:'Marc Lefèvre', role:'conseiller', coms:['fin','eco']},
+    {id:'secretariat', name:'Secrétariat de mairie', role:'admin', coms:[]},
+    {id:'paul', name:'Paul Girard', role:'adjoint', deleg:'Finances', coms:['fin','eco']},
+    {id:'nadia', name:'Nadia Benali', role:'adjoint', f:true, deleg:'Solidarités', coms:['soli','ecole']},
+    {id:'julien', name:'Julien Roux', role:'conseiller', coms:['urb','cult']},
+    {id:'claire', name:'Claire Vidal', role:'conseiller', f:true, coms:['ecole','cult','soli']}
+  ],
+  events:[
+    {id:'e1', date:'2026-11-06', time:'18:00', title:'Commission Solidarités', what:'Colis de Noël des aînés : finaliser l’organisation', place:'Mairie, salle des commissions', com:'soli', vis:'com'},
+    {id:'e2', date:'2026-11-09', time:'18:30', title:'Commission Finances', what:'Préparer la décision modificative n° 2', place:'Mairie, salle du conseil', com:'fin', vis:'com'},
+    {id:'e3', date:'2026-11-11', time:'11:00', title:'Cérémonie du 11-Novembre', what:'Dépôt de gerbe, présence des élus souhaitée', place:'Monument aux morts', com:null, vis:'tous'},
+    {id:'e4', date:'2026-11-12', time:'18:00', title:'Commission Urbanisme', what:'Révision du PLU : atelier zonage', place:'Mairie, salle du conseil', com:'urb', vis:'com'},
+    {id:'e5', date:'2026-11-14', time:'10:00', title:'Visite de chantier', what:'Aménagement de la porte Saint-Romain', place:'Porte Saint-Romain', com:'urb', vis:'com'},
+    {id:'e6', date:'2026-11-17', time:'09:30', title:'Rencontre des commerçants', what:'Tour du marché du mardi', place:'Place de la République', com:'eco', vis:'com'},
+    {id:'e7', date:'2026-11-18', time:'17:30', title:'Réunion de bureau', what:'Arrêter l’ordre du jour du conseil', place:'Bureau du maire', com:null, vis:'bureau'},
+    {id:'e8', date:'2026-11-19', time:'20:00', title:'Conseil municipal', what:'Convocation et deux documents à lire', place:'Mairie, salle du conseil', com:null, vis:'tous', conseil:true},
+    {id:'e9', date:'2026-11-23', time:'18:00', title:'Commission Transition énergétique', what:'Éclairage public : horaires d’extinction', place:'Mairie, salle des commissions', com:'ener', vis:'com'},
+    {id:'e10', date:'2026-11-25', time:'18:00', title:'Commission École et restauration', what:'Menus et produits locaux', place:'Restaurant scolaire', com:'ecole', vis:'com'},
+    {id:'e11', date:'2026-12-03', time:'19:00', title:'Commission Culture et festivités', what:'Marché de Noël : qui fait quoi', place:'Mairie, salle des commissions', com:'cult', vis:'com'}
+  ],
+  docs:[
+    {id:'d1', title:'Convocation — séance du 19 novembre 2026', cat:'seances', com:null, vis:'tous', date:'2026-11-04', type:'PDF', size:'210 Ko'},
+    {id:'d2', title:'Note de synthèse — séance du 19 novembre 2026', cat:'seances', com:null, vis:'tous', date:'2026-11-04', type:'PDF', size:'640 Ko'},
+    {id:'d3', title:'Projet de décision modificative n° 2', cat:'budget', com:'fin', vis:'tous', date:'2026-11-03', type:'PDF', size:'380 Ko'},
+    {id:'d4', title:'Ordre du jour provisoire du conseil', cat:'bureau', com:null, vis:'bureau', date:'2026-11-03', type:'DOC', size:'45 Ko'},
+    {id:'d5', title:'Révision du PLU — calendrier', cat:'projets', com:'urb', vis:'com', date:'2026-11-02', type:'PDF', size:'120 Ko'},
+    {id:'d6', title:'Colis des aînés — organisation (brouillon)', cat:'commissions', com:'soli', vis:'com', date:'2026-11-03', type:'DOC', size:'38 Ko'},
+    {id:'d7', title:'Compte rendu — commission École du 8 octobre', cat:'commissions', com:'ecole', vis:'com', date:'2026-10-20', type:'PDF', size:'95 Ko'},
+    {id:'d8', title:'Procès-verbal — séance du 13 mai 2026', cat:'seances', com:null, vis:'tous', date:'2026-06-10', type:'PDF', size:'1,1 Mo'},
+    {id:'d9', title:'Procès-verbal — séance du 20 mars 2026', cat:'seances', com:null, vis:'tous', date:'2026-04-08', type:'PDF', size:'980 Ko'},
+    {id:'d10', title:'Projet de règlement intérieur du conseil', cat:'seances', com:null, vis:'tous', date:'2026-04-08', type:'PDF', size:'310 Ko'},
+    {id:'d11', title:'Modèle de pouvoir (procuration)', cat:'seances', com:null, vis:'tous', date:'2026-04-01', type:'PDF', size:'60 Ko'},
+    {id:'d12', title:'Budget primitif 2026 — commune', cat:'budget', com:'fin', vis:'tous', date:'2026-04-08', type:'PDF', size:'2,4 Mo'},
+    {id:'d13', title:'Budget primitif 2026 — assainissement', cat:'budget', com:'fin', vis:'tous', date:'2026-04-08', type:'PDF', size:'890 Ko'},
+    {id:'d14', title:'Budget 2026 — immeuble du 15 place de la République', cat:'budget', com:'fin', vis:'tous', date:'2026-04-08', type:'PDF', size:'520 Ko'},
+    {id:'d15', title:'Compte financier unique 2025 — commune', cat:'budget', com:'fin', vis:'tous', date:'2026-04-08', type:'PDF', size:'3,1 Mo'},
+    {id:'d16', title:'Règlement budgétaire M57', cat:'budget', com:'fin', vis:'tous', date:'2026-01-20', type:'PDF', size:'240 Ko'},
+    {id:'d17', title:'Porte Saint-Romain — plan d’aménagement (avant-projet)', cat:'projets', com:'urb', vis:'com', date:'2026-06-02', type:'PDF', size:'4,6 Mo'},
+    {id:'d18', title:'Route de Langon — plan d’aménagement (avant-projet)', cat:'projets', com:'urb', vis:'com', date:'2026-06-02', type:'PDF', size:'4,2 Mo'},
+    {id:'d19', title:'Estimation des travaux — avant-projet', cat:'projets', com:'urb', vis:'com', date:'2026-06-02', type:'PDF', size:'180 Ko'},
+    {id:'d20', title:'Convention de servitude SDEEG', cat:'projets', com:'ener', vis:'com', date:'2026-05-28', type:'PDF', size:'350 Ko'}
+  ],
+  pins:{
+    tous:'Conseil municipal jeudi 19 novembre à 20 h. Convocation dans Documents.',
+    bureau:'Ordre du jour du conseil à arrêter mercredi 18.',
+    fin:'Lundi 9 : valider la décision modificative n° 2 avant le conseil.',
+    urb:'Jeudi 12 : atelier PLU. Samedi 14 : visite porte Saint-Romain.',
+    eco:'Mardi 17 : tour du marché avec les commerçants.',
+    ener:'Lundi 23 : horaires de l’éclairage public.',
+    ecole:'Mercredi 25 : menus et produits locaux.',
+    soli:'Vendredi 6 : finaliser les colis des aînés.',
+    cult:'Jeudi 3 décembre : organisation du marché de Noël.'
+  },
+  msgs:{
+    tous:[
+      {who:'secretariat', when:'Hier · 16 h 12', text:'La convocation du conseil du 19 novembre et la note de synthèse sont dans Documents.'},
+      {who:'helene', when:'Aujourd’hui · 8 h 40', text:'Merci d’indiquer votre présence dans l’Agenda avant lundi. En cas d’absence, pensez au pouvoir.'}
+    ],
+    bureau:[
+      {who:'helene', when:'Hier · 19 h 05', text:'Je propose de passer la décision modificative en point 3. Avis ?'},
+      {who:'paul', when:'Hier · 19 h 30', text:'D’accord pour moi.'}
+    ],
+    fin:[
+      {who:'paul', when:'Lundi · 10 h 15', text:'Le projet de décision modificative est en ligne. On en parle lundi 9 en commission.'},
+      {who:'marc', when:'Hier · 21 h 02', text:'J’aurai une question sur la ligne voirie. Je l’apporte lundi.'}
+    ],
+    urb:[
+      {who:'sophie', when:'Lundi · 9 h 00', text:'Le calendrier de révision du PLU est dans Documents.'},
+      {who:'julien', when:'Hier · 18 h 20', text:'Je serai à la visite de la porte Saint-Romain samedi.'},
+      {who:'sophie', when:'Aujourd’hui · 7 h 55', text:'Rendez-vous 10 h devant la porte. Prévoir des bottes.'}
+    ],
+    eco:[{who:'marc', when:'Hier · 12 h 10', text:'J’ai prévenu six commerçants pour mardi 17 au marché.'}],
+    ener:[{who:'sophie', when:'28 oct. · 18 h 00', text:'Prochaine commission le 23 novembre. Sujet : horaires de l’éclairage public.'}],
+    ecole:[{who:'nadia', when:'20 oct. · 17 h 45', text:'Le compte rendu de la commission du 8 octobre est en ligne.'}],
+    soli:[{who:'nadia', when:'Aujourd’hui · 9 h 10', text:'Commission demain 18 h pour boucler les colis de Noël.'}],
+    cult:[{who:'claire', when:'30 oct. · 20 h 15', text:'Marché de Noël : il faut quatre élus pour tenir le stand.'}]
+  },
+  unread:{tous:2, bureau:1, fin:2, urb:3, eco:1, soli:1},
+  read:{}, rsvp:{}
+};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const d = s => { const [y,m,dd] = s.split('-').map(Number); return new Date(y, m-1, dd); };
+const addDays = (dt,n) => new Date(dt.getFullYear(), dt.getMonth(), dt.getDate()+n);
+const days = (a,b) => Math.round((b - a) / 86400000);
+const fmtTime = t => { const [h,m] = t.split(':'); return m === '00' ? (+h) + ' h' : (+h) + ' h ' + m; };
+const fmtShort = s => { const x = d(s); return x.getDate() + ' ' + MOS[x.getMonth()] + (x.getFullYear() !== TODAY.getFullYear() ? ' ' + x.getFullYear() : ''); };
+const fmtLong = s => { const x = d(s); return x.getDate() + ' ' + MO[x.getMonth()] + ' ' + x.getFullYear(); };
+const isNew = x => { const n = days(d(x.date), TODAY); return n >= 0 && n <= 7; };
+const joinFr = a => a.length < 2 ? a.join('') : a.slice(0,-1).join(', ') + ' et ' + a[a.length-1];
+const initials = name => name.split(/\s+/).filter(w => w.length > 2 || /^[A-ZÉ]/.test(w)).slice(0,2).map(w => w[0].toUpperCase()).join('');
+
+const me = () => S.members.find(m => m.id === S.me);
+const com = id => S.commissions.find(c => c.id === id);
+const isAll = p => p.role === 'admin' || p.role === 'maire';
+const myComs = p => isAll(p) ? S.commissions.map(c => c.id) : p.coms.filter(id => com(id));
+const first = m => m.role === 'admin' ? 'Secrétariat' : m.name.split(' ')[0];
+const roleName = m => ({admin:'Admin mairie', maire:'Maire', adjoint: m.f ? 'Adjointe' : 'Adjoint', conseiller: m.f ? 'Conseillère' : 'Conseiller'})[m.role];
+
+function canSee(it, p){
+  p = p || me();
+  if (isAll(p)) return true;
+  if (it.vis === 'tous') return true;
+  if (it.vis === 'bureau') return p.role === 'adjoint';
+  if (it.vis === 'com') return p.coms.includes(it.com);
+  return false;
+}
+function relevant(it, p){ p = p || me(); return isAll(p) || !it.com || p.coms.includes(it.com); }
+function passFilter(it){
+  if (!canSee(it)) return false;
+  if (S.filter === 'tout') return true;
+  if (S.filter === 'moi') return relevant(it);
+  return it.com === S.filter;
+}
+function visLabel(it){
+  if (it.vis === 'tous') return 'Tout le conseil';
+  if (it.vis === 'bureau') return 'Maire et adjoints';
+  const c = com(it.com);
+  return c ? 'Commission « ' + c.name + ' »' : 'Commission supprimée';
+}
+function visShort(it){
+  if (it.vis === 'tous') return 'Tout le conseil';
+  if (it.vis === 'bureau') return 'Bureau';
+  const c = com(it.com); return c ? c.name : 'Archivé';
+}
+function colOf(it){ const c = it.com && com(it.com); return cv(c ? c.k : (it.vis === 'bureau' ? 'myrtille' : 'cobalt')); }
+function upcoming(fn){
+  return S.events.filter(e => d(e.date) >= TODAY && fn(e)).sort((a,b) => (a.date + a.time).localeCompare(b.date + b.time));
+}
+function channels(){
+  const list = [
+    {id:'tous', name:'Tout le conseil', vis:'tous', com:null},
+    {id:'bureau', name:'Bureau', vis:'bureau', com:null}
+  ];
+  S.commissions.forEach(c => list.push({id:c.id, name:c.name, vis:'com', com:c.id}));
+  return list.filter(ch => canSee(ch));
+}
+function unreadOf(ch){ return (S.read[S.me] || []).includes(ch.id) ? 0 : (S.unread[ch.id] || 0); }
+
+function seesText(p){
+  const n = first(p);
+  if (isAll(p)) return n + ' voit tout, administration comprise.';
+  const cs = p.coms.map(com).filter(Boolean).map(c => '« ' + c.name + ' »');
+  const list = cs.length ? (cs.length > 1 ? 'les commissions ' : 'la commission ') + joinFr(cs) : 'aucune commission';
+  return p.role === 'adjoint'
+    ? n + ' voit tout le conseil, le bureau et ' + list + '.'
+    : n + ' voit tout le conseil et ' + list + '. Ni le bureau, ni l’administration.';
+}
+
+/* ---------- Gabarits ---------- */
+function mockHtml(){
+  const prof = ['helene','sophie','marc','secretariat'].map(id => S.members.find(m => m.id === id));
+  return '<div class="mock-label"><span>Maquette · données fictives</span><span>Voir l’appli comme :</span></div>' +
+    '<div class="who">' + prof.map(m =>
+      '<button type="button" data-act="who" data-v="' + m.id + '" aria-pressed="' + (S.me === m.id) + '"><b>' + esc(first(m)) + '</b><span>' + roleName(m) + '</span></button>'
+    ).join('') + '</div><p class="mock-note">' + esc(seesText(me())) + '</p>';
+}
+function topHtml(){
+  const p = me();
+  return '<div><p class="place-line">Sauveterre-de-Guyenne · Conseil municipal</p>' +
+    '<p class="hello">' + (p.role === 'admin' ? 'Bonjour' : 'Bonjour ' + esc(first(p))) + '</p>' +
+    '<div class="meta-line"><span class="role">' + roleName(p) + '</span><span>' + cap(WD[TODAY.getDay()]) + ' ' + TODAY.getDate() + ' ' + MO[TODAY.getMonth()] + '</span></div></div>' +
+    '<button type="button" class="icon-btn" data-act="settings" aria-label="Réglages de lecture">Aa</button>';
+}
+function head(title, icon){ return '<div class="view-head"><span class="glyph">' + icon + '</span><h1>' + title + '</h1></div>'; }
+
+function chipsRow(){
+  const p = me(), all = isAll(p);
+  const items = [['moi', all ? 'Tout' : 'Pour moi', null]].concat(myComs(p).map(id => { const c = com(id); return [c.id, c.name, c.k]; }));
+  if (!all) items.push(['tout', 'Tout', null]);
+  return '<div class="chips" role="group" aria-label="Filtrer">' + items.map(([v,l,h]) =>
+    '<button type="button" class="chip"' + (h != null ? ' style="' + cv(h) + '"' : '') + ' aria-pressed="' + (S.filter === v) + '" data-act="filter" data-v="' + v + '">' +
+    (h != null ? '<span class="dot"></span>' : '') + esc(l) + '</button>'
+  ).join('') + '</div>';
+}
+
+function evCard(e){
+  const dt = d(e.date), r = S.rsvp[S.me + ':' + e.id];
+  return '<article class="ev" style="' + colOf(e) + '">' +
+    '<div class="day" aria-hidden="true"><div class="wd">' + WDS[dt.getDay()] + '</div><div class="dn">' + dt.getDate() + '</div><div class="mo">' + MOS[dt.getMonth()] + '</div></div>' +
+    '<div><h3>' + esc(e.title) + '</h3><p class="what">' + esc(e.what) + '</p>' +
+    '<div class="facts">' +
+      '<span class="fact">' + ic.clock + '<span>' + cap(WD[dt.getDay()]) + ' ' + dt.getDate() + ' ' + MO[dt.getMonth()] + ' · ' + fmtTime(e.time) + '</span></span>' +
+      '<span class="fact">' + ic.place + '<span>' + esc(e.place) + '</span></span>' +
+      '<span class="fact">' + ic.eye + '<span>' + esc(visLabel(e)) + '</span></span>' +
+    '</div>' +
+    '<div class="rsvp">' +
+      '<button type="button" class="pill-btn yes" aria-pressed="' + (r === 'oui') + '" data-act="rsvp" data-id="' + e.id + '" data-v="oui">' + ic.check + 'Je viens</button>' +
+      '<button type="button" class="pill-btn no" aria-pressed="' + (r === 'non') + '" data-act="rsvp" data-id="' + e.id + '" data-v="non">Je ne peux pas</button>' +
+    '</div>' +
+    (e.conseil && r === 'non' ? '<button type="button" class="link-btn" data-act="pouvoir">Donner mon pouvoir à un collègue</button>' : '') +
+    '</div></article>';
+}
+
+function band(tab, sec, icon, label, sub, num){
+  return '<button type="button" class="band s-' + sec + '" data-act="tab" data-v="' + tab + '"><span class="ico">' + icon + '</span>' +
+    '<span class="txt"><span class="lab">' + label + '</span><span class="sub">' + sub + '</span></span>' +
+    (num ? '<span class="num" aria-hidden="true">' + num + '</span>' : '') + '</button>';
+}
+
+function vHome(){
+  const p = me();
+  const evs = upcoming(e => canSee(e) && relevant(e));
+  const next = evs[0];
+  const in15 = evs.filter(e => days(TODAY, d(e.date)) <= 14).length;
+  const unread = channels().reduce((a,c) => a + unreadOf(c), 0);
+  const newDocs = S.docs.filter(x => canSee(x) && relevant(x) && isNew(x)).length;
+  const coms = myComs(p).map(com);
+  return (next ? '<section aria-labelledby="next-h"><h2 class="eyebrow" id="next-h">Ensuite</h2>' + evCard(next) + '</section>' : '') +
+    '<div class="bands">' +
+      band('agenda','agenda',ic.cal,'Agenda', in15 ? in15 + ' rendez-vous dans les 15 jours' : 'Rien de prévu', in15) +
+      band('msgs','msg',ic.chat,'Messages', unread ? unread + ' message' + (unread > 1 ? 's' : '') + ' non lu' + (unread > 1 ? 's' : '') : 'Rien de nouveau', unread) +
+      band('docs','docs',ic.doc,'Documents', newDocs ? newDocs + ' nouveau' + (newDocs > 1 ? 'x' : '') + ' cette semaine' : 'Rien de nouveau', newDocs) +
+      (isAll(p) ? band('admin','admin',ic.admin,'Administration','Commissions, membres et droits', 0) : '') +
+    '</div>' +
+    (coms.length ? '<section class="mine"><h2 class="eyebrow">' + (isAll(p) ? 'Commissions' : 'Mes commissions') + '</h2><div class="chips">' +
+      coms.map(c => '<button type="button" class="chip" style="' + cv(c.k) + '" data-act="gocom" data-v="' + c.id + '"><span class="dot"></span>' + esc(c.name) + '</button>').join('') +
+      '</div></section>' : '');
+}
+
+function vAgenda(){
+  const evs = upcoming(passFilter);
+  const endThis = addDays(TODAY, (7 - TODAY.getDay()) % 7), endNext = addDays(endThis, 7);
+  const groups = [
+    ['Cette semaine', e => d(e.date) <= endThis],
+    ['Semaine prochaine', e => d(e.date) > endThis && d(e.date) <= endNext],
+    ['Plus tard', e => d(e.date) > endNext]
+  ];
+  const body = evs.length ? groups.map(([t,f]) => {
+    const l = evs.filter(f);
+    return l.length ? '<section><h2 class="grp">' + t + '</h2><div class="list">' + l.map(evCard).join('') + '</div></section>' : '';
+  }).join('') : '<p class="empty">Aucun rendez-vous avec ce filtre.</p>';
+  return head('Agenda', ic.cal) + chipsRow() + body;
+}
+
+function vMsgs(){
+  if (S.chan) return vThread();
+  return head('Messages', ic.chat) +
+    '<p class="lead">Un fil pour tout le conseil, un pour le bureau, un par commission.</p>' +
+    '<div class="list">' + channels().map(ch => {
+      const u = unreadOf(ch);
+      return '<button type="button" class="chan" data-act="chan" data-v="' + ch.id + '" style="' + colOf(ch) + '">' +
+        '<span class="sq" aria-hidden="true">' + initials(ch.name) + '</span>' +
+        '<span class="txt"><span class="nm">' + esc(ch.name) + '</span><span class="pv">' + esc(S.pins[ch.id] || 'Pas encore de message épinglé.') + '</span></span>' +
+        (u ? '<span class="badge">' + u + '<span class="sr"> non lus</span></span>' : '') + '</button>';
+    }).join('') + '</div>';
+}
+
+function msgHtml(m){
+  const a = S.members.find(x => x.id === m.who) || {name:'Élu', role:'conseiller'};
+  const mine = m.who === S.me;
+  return '<div class="msg' + (mine ? ' me' : '') + '"><span class="av" aria-hidden="true">' + initials(a.name) + '</span>' +
+    '<div class="bubble"><div class="who-line"><b>' + (mine ? 'Vous' : esc(a.name)) + '</b><span>' + esc(m.when) + '</span></div><p>' + esc(m.text) + '</p></div></div>';
+}
+
+function vThread(){
+  const ch = channels().find(c => c.id === S.chan);
+  if (!ch) { S.chan = null; return vMsgs(); }
+  const list = S.msgs[ch.id] || [];
+  return '<div class="thread-head"><button type="button" class="icon-btn" data-act="back" aria-label="Retour aux fils">' + ic.back + '</button>' +
+    '<div><h1>' + esc(ch.name) + '</h1><div class="vis">' + ic.eye + '<span>' + esc(visLabel(ch)) + '</span></div></div></div>' +
+    '<div class="pinned">' + ic.pin + '<div><b>L’essentiel</b>' + esc(S.pins[ch.id] || 'Pas encore de message épinglé.') + '</div></div>' +
+    '<div class="msgs">' + (list.length ? list.map(msgHtml).join('') : '<p class="empty">Aucun message pour l’instant.</p>') + '</div>' +
+    '<form class="composer" data-form="send"><label class="sr" for="composer">Votre message</label>' +
+    '<textarea id="composer" rows="1" placeholder="Écrire à « ' + esc(ch.name) + ' »"></textarea>' +
+    '<button class="send" type="submit" aria-label="Envoyer">' + ic.send + '</button></form>';
+}
+
+function docList(l){
+  return '<div class="docs">' + l.slice().sort((a,b) => b.date.localeCompare(a.date)).map(x =>
+    '<button type="button" class="doc" data-act="doc" data-v="' + x.id + '"><span class="ft" aria-hidden="true">' + x.type + '</span>' +
+    '<span class="txt"><span class="t">' + esc(x.title) + '</span><span class="m">' + (isNew(x) ? '<span class="new">Nouveau</span>' : '') +
+    '<span>' + fmtShort(x.date) + '</span><span>· ' + esc(visShort(x)) + '</span></span></span></button>'
+  ).join('') + '</div>';
+}
+
+function docResults(){
+  const vis = S.docs.filter(x => canSee(x));
+  if (S.q.trim()) {
+    const q = norm(S.q.trim());
+    const l = vis.filter(x => norm(x.title).includes(q));
+    return '<h2 class="grp">' + l.length + ' résultat' + (l.length > 1 ? 's' : '') + '</h2>' + (l.length ? docList(l) : '<p class="empty">Aucun document ne correspond.</p>');
+  }
+  if (S.docCat) {
+    const c = CATS.find(c => c.id === S.docCat);
+    const l = vis.filter(x => x.cat === S.docCat && passFilter(x));
+    return '<button type="button" class="link-btn" data-act="catback">' + ic.back + 'Toutes les catégories</button>' +
+      '<h2 class="sub-h">' + c.name + '</h2>' + chipsRow() +
+      (l.length ? docList(l) : '<p class="empty">Rien ici avec ce filtre. Essayez « Tout ».</p>');
+  }
+  const news = vis.filter(x => isNew(x) && passFilter(x));
+  const cats = CATS.filter(c => vis.some(x => x.cat === c.id));
+  return chipsRow() +
+    (news.length ? '<h2 class="grp">Nouveaux cette semaine</h2>' + docList(news) : '') +
+    '<h2 class="grp">Par catégorie</h2><div class="cats">' + cats.map(c => {
+      const n = vis.filter(x => x.cat === c.id && passFilter(x)).length;
+      return '<button type="button" class="cat" data-act="cat" data-v="' + c.id + '"><span class="n">' + n + '</span><span class="l">' + c.name + '</span></button>';
+    }).join('') + '</div>';
+}
+
+function vDocs(){
+  return head('Documents', ic.doc) +
+    '<div class="search">' + ic.search + '<label class="sr" for="doc-q">Chercher un document</label>' +
+    '<input id="doc-q" type="search" placeholder="Chercher un document" value="' + esc(S.q) + '" autocomplete="off"></div>' +
+    '<div id="doc-results">' + docResults() + '</div>';
+}
+
+function vAdmin(){
+  const roleOpts = [['maire','Maire'],['adjoint','Adjoint au maire'],['conseiller','Conseiller municipal'],['admin','Admin mairie']];
+  const comRows = S.commissions.map(c => {
+    const n = S.members.filter(m => !isAll(m) && m.coms.includes(c.id)).length;
+    const k = upcoming(e => e.com === c.id).length;
+    return '<div class="com-row" style="' + cv(c.k) + '"><span class="sw" aria-hidden="true"></span>' +
+      '<div class="txt"><b>' + esc(c.name) + '</b><span class="muted small">' + n + ' membre' + (n > 1 ? 's' : '') + ' · ' + k + ' rendez-vous à venir</span></div>' +
+      '<div class="acts">' + (S.confirmDel === c.id
+        ? '<button type="button" class="danger" data-act="del-yes" data-v="' + c.id + '">Confirmer</button><button type="button" class="ghost" data-act="del-no">Annuler</button>'
+        : '<button type="button" class="ghost" data-act="del" data-v="' + c.id + '" aria-label="Supprimer la commission ' + esc(c.name) + '">Supprimer</button>') +
+      '</div></div>';
+  }).join('');
+  const addForm = '<form class="card" data-form="addcom"><h2>Nouvelle commission</h2>' +
+    '<div class="field"><label for="new-com">Nom</label><input type="text" id="new-com" placeholder="Ex. : Voirie et sécurité" autocomplete="off" value="' + esc(S.newName) + '"></div>' +
+    '<div class="field"><span class="lbl" id="hue-lbl">Couleur : <span id="hue-name">' + palName(S.newK) + '</span></span><div class="hues" role="group" aria-labelledby="hue-lbl">' +
+      PAL.map(([k,n]) => '<button type="button" class="hue" style="' + cv(k) + '" aria-pressed="' + (S.newK === k) + '" data-act="hue" data-v="' + k + '" aria-label="' + n + '" title="' + n + '"></button>').join('') +
+    '</div></div>' + (S.err ? '<p class="err" role="alert">' + esc(S.err) + '</p>' : '') +
+    '<button class="primary" type="submit">' + ic.plus + 'Créer la commission</button></form>';
+  const members = S.members.map(m =>
+    '<div class="member"><div class="m-top"><span class="av" aria-hidden="true">' + initials(m.name) + '</span>' +
+    '<div class="txt"><b>' + esc(m.name) + '</b><span class="muted small">' + roleName(m) + (m.deleg && m.role === 'adjoint' ? ' · ' + esc(m.deleg) : '') + '</span></div>' +
+    '<label class="sr" for="role-' + m.id + '">Rôle de ' + esc(m.name) + '</label><select id="role-' + m.id + '" data-change="role" data-id="' + m.id + '">' +
+      roleOpts.map(([v,l]) => '<option value="' + v + '"' + (m.role === v ? ' selected' : '') + '>' + l + '</option>').join('') + '</select></div>' +
+    (isAll(m) ? '<p class="muted small">Voit toutes les commissions.</p>'
+      : '<div class="toggle-chips" role="group" aria-label="Commissions de ' + esc(m.name) + '">' + S.commissions.map(c =>
+          '<button type="button" class="chip sm" style="' + cv(c.k) + '" aria-pressed="' + m.coms.includes(c.id) + '" data-act="mcom" data-id="' + m.id + '" data-v="' + c.id + '"><span class="dot"></span>' + esc(c.name) + '</button>'
+        ).join('') + '</div>') +
+    '</div>'
+  ).join('');
+  const rows = [['Admin mairie','Oui','Oui','Toutes','Oui'],['Maire','Oui','Oui','Toutes','Oui'],['Adjoint','Oui','Oui','Les siennes','Non'],['Conseiller','Oui','Non','Les siennes','Non']];
+  const table = '<div class="tbl-wrap"><table><thead><tr><th scope="col">Niveau</th><th scope="col">Tout le conseil</th><th scope="col">Bureau</th><th scope="col">Commissions</th><th scope="col">Admin</th></tr></thead><tbody>' +
+    rows.map(r => '<tr><th scope="row">' + r[0] + '</th>' + r.slice(1).map(v => '<td class="' + (v === 'Non' ? 'n' : 'y') + '">' + v + '</td>').join('') + '</tr>').join('') +
+    '</tbody></table></div>';
+  return head('Administration', ic.admin) +
+    '<p class="lead">Réservé au maire et au secrétariat. Les changements s’appliquent tout de suite : changez de profil en haut pour voir l’effet.</p>' +
+    '<section class="card"><h2>Commissions</h2>' + comRows + '</section>' + addForm +
+    '<section class="card"><h2>Membres et droits</h2>' + members + '</section>' +
+    '<section class="card"><h2>Qui voit quoi</h2>' + table +
+    '<p class="note">Les documents soumis au vote restent visibles par tout le conseil. Le filtre « Pour moi » trie, il ne cache rien.</p></section>';
+}
+
+function tabsHtml(){
+  const p = me();
+  const unread = channels().reduce((a,c) => a + unreadOf(c), 0);
+  const newDocs = S.docs.filter(x => canSee(x) && relevant(x) && isNew(x)).length;
+  const t = [['home','home',ic.home,'Accueil',0],['agenda','agenda',ic.cal,'Agenda',0],['msgs','msg',ic.chat,'Messages',unread],['docs','docs',ic.doc,'Documents',newDocs]];
+  if (isAll(p)) t.push(['admin','admin',ic.admin,'Admin',0]);
+  return t.map(([id,sec,icon,label,n]) =>
+    '<button type="button" class="tab s-' + sec + '" data-act="tab" data-v="' + id + '"' + (S.tab === id ? ' aria-current="page"' : '') + '>' + icon + '<span>' + label + '</span>' +
+    (n ? '<span class="badge">' + n + '<span class="sr"> nouveaux</span></span>' : '') + '</button>'
+  ).join('');
+}
+
+const SEC = {home:'home', agenda:'agenda', msgs:'msg', docs:'docs', admin:'admin'};
+function viewHtml(){
+  switch (S.tab) {
+    case 'agenda': return vAgenda();
+    case 'msgs': return vMsgs();
+    case 'docs': return vDocs();
+    case 'admin': return vAdmin();
+    default: return vHome();
+  }
+}
+function render(){
+  if (S.tab === 'admin' && !isAll(me())) S.tab = 'home';
+  document.documentElement.classList.toggle('big', S.big);
+  document.body.classList.toggle('calm', S.calm);
+  $('#mock').innerHTML = mockHtml();
+  $('#top').innerHTML = topHtml();
+  const v = $('#view');
+  v.className = 's-' + SEC[S.tab];
+  v.innerHTML = viewHtml();
+  $('#tabs').innerHTML = tabsHtml();
+}
+
+/* ---------- Feuilles ---------- */
+let lastFocus = null, tt = null;
+function openSheet(html){
+  lastFocus = document.activeElement;
+  const sh = $('#sheet');
+  sh.innerHTML = '<div class="sheet-in"><div class="grab" aria-hidden="true"></div>' + html + '</div>';
+  sh.hidden = false; $('#scrim').hidden = false;
+  const f = sh.querySelector('button'); if (f) f.focus();
+}
+function closeSheet(){
+  $('#sheet').hidden = true; $('#scrim').hidden = true;
+  if (lastFocus && document.body.contains(lastFocus)) lastFocus.focus();
+}
+function toast(t){
+  const el = $('#toast'); el.textContent = t; el.hidden = false;
+  clearTimeout(tt); tt = setTimeout(() => { el.hidden = true; }, 3000);
+}
+function settingsSheet(){
+  openSheet('<h2 id="sheet-t">Réglages de lecture</h2>' +
+    '<div class="sw-row"><div><b>Gros caractères</b><span class="muted small">Tout le texte plus grand.</span></div><button type="button" class="switch" role="switch" aria-checked="' + S.big + '" data-act="switch" data-v="big" aria-label="Gros caractères"></button></div>' +
+    '<div class="sw-row"><div><b>Mode calme</b><span class="muted small">Cache les compteurs et les pastilles rouges.</span></div><button type="button" class="switch" role="switch" aria-checked="' + S.calm + '" data-act="switch" data-v="calm" aria-label="Mode calme"></button></div>' +
+    '<p class="muted small">Notifications : seulement le conseil, le bureau si vous en êtes, et vos commissions.</p>' +
+    '<div class="row"><button type="button" class="pill-btn" data-act="close">Fermer</button></div>');
+}
+function docSheet(id){
+  const x = S.docs.find(o => o.id === id); if (!x) return;
+  const c = x.com && com(x.com);
+  openSheet('<div class="sheet-head"><span class="ft" aria-hidden="true">' + x.type + '</span><h2 id="sheet-t">' + esc(x.title) + '</h2></div>' +
+    '<dl class="dl"><div><dt>Ajouté le</dt><dd>' + fmtLong(x.date) + '</dd></div><div><dt>Taille</dt><dd>' + x.size + '</dd></div>' +
+    '<div><dt>Visible par</dt><dd>' + esc(visLabel(x)) + '</dd></div>' + (c ? '<div><dt>Thème</dt><dd>' + esc(c.name) + '</dd></div>' : '') + '</dl>' +
+    '<div class="row"><button type="button" class="primary s-docs" data-act="open-doc">Ouvrir le document</button><button type="button" class="pill-btn" data-act="close">Fermer</button></div>');
+}
+function pouvoirSheet(){
+  const others = S.members.filter(m => m.id !== S.me && m.role !== 'admin');
+  openSheet('<h2 id="sheet-t">Donner mon pouvoir</h2><p class="muted">Choisissez l’élu qui votera pour vous le 19 novembre. Un élu ne peut porter qu’un seul pouvoir.</p>' +
+    '<div class="list">' + others.map(m =>
+      '<button type="button" class="chan" data-act="give" data-v="' + m.id + '"><span class="sq" style="--c:var(--k-cobalt)" aria-hidden="true">' + initials(m.name) + '</span>' +
+      '<span class="txt"><span class="nm">' + esc(m.name) + '</span><span class="pv">' + roleName(m) + '</span></span></button>'
+    ).join('') + '</div><div class="row"><button type="button" class="pill-btn" data-act="close">Annuler</button></div>');
+}
+
+/* ---------- Actions ---------- */
+function go(tab){ S.tab = tab; S.chan = null; S.confirmDel = null; S.err = ''; if (tab !== 'docs') { S.docCat = null; } render(); window.scrollTo(0,0); }
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]'); if (!b) return;
+  const a = b.dataset.act, v = b.dataset.v, id = b.dataset.id;
+  switch (a) {
+    case 'who':
+      S.me = v; S.filter = 'moi'; S.chan = null; S.docCat = null; S.q = ''; S.confirmDel = null; S.err = '';
+      render(); break;
+    case 'tab': go(v); break;
+    case 'gocom': S.filter = v; go('agenda'); break;
+    case 'filter': S.filter = v; render(); break;
+    case 'rsvp': {
+      const k = S.me + ':' + id, ev = S.events.find(x => x.id === id);
+      if (S.rsvp[k] === v) { delete S.rsvp[k]; }
+      else { S.rsvp[k] = v; toast(v === 'oui' ? 'Présence notée.' : (ev && ev.conseil ? 'Absence notée. Vous pouvez donner votre pouvoir.' : 'Absence notée.')); }
+      render(); break;
+    }
+    case 'pouvoir': pouvoirSheet(); break;
+    case 'give': {
+      const m = S.members.find(x => x.id === v); closeSheet();
+      toast('Maquette : le pouvoir pour ' + m.name + ' partirait au secrétariat.'); break;
+    }
+    case 'chan':
+      S.chan = v; S.read[S.me] = (S.read[S.me] || []).concat(v);
+      render(); window.scrollTo(0,0); break;
+    case 'back': S.chan = null; render(); break;
+    case 'doc': docSheet(v); break;
+    case 'cat': S.docCat = v; render(); break;
+    case 'catback': S.docCat = null; render(); break;
+    case 'open-doc': closeSheet(); toast('Maquette : le PDF s’ouvrirait ici.'); break;
+    case 'settings': settingsSheet(); break;
+    case 'switch':
+      S[v] = !S[v]; b.setAttribute('aria-checked', String(S[v])); render(); break;
+    case 'close': closeSheet(); break;
+    case 'hue':
+      S.newK = v;
+      document.querySelectorAll('.hue').forEach(h => h.setAttribute('aria-pressed', String(h.dataset.v === S.newK)));
+      { const hn = $('#hue-name'); if (hn) hn.textContent = palName(v); }
+      break;
+    case 'del': S.confirmDel = v; render(); break;
+    case 'del-no': S.confirmDel = null; render(); break;
+    case 'del-yes': {
+      const c = com(v);
+      S.commissions = S.commissions.filter(x => x.id !== v);
+      S.members.forEach(m => { m.coms = m.coms.filter(x => x !== v); });
+      if (S.filter === v) S.filter = 'moi';
+      S.confirmDel = null; render();
+      if (c) toast('Commission « ' + c.name + ' » supprimée.');
+      break;
+    }
+    case 'mcom': {
+      const m = S.members.find(x => x.id === id);
+      m.coms = m.coms.includes(v) ? m.coms.filter(x => x !== v) : m.coms.concat(v);
+      render(); break;
+    }
+  }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target;
+  if (t.dataset.change === 'role') {
+    const m = S.members.find(x => x.id === t.dataset.id);
+    m.role = t.value; render(); toast('Rôle de ' + m.name + ' : ' + roleName(m) + '.');
+  }
+});
+
+document.addEventListener('input', e => {
+  if (e.target.id === 'doc-q') { S.q = e.target.value; $('#doc-results').innerHTML = docResults(); }
+  if (e.target.id === 'new-com') { S.newName = e.target.value; }
+});
+
+document.addEventListener('submit', e => {
+  const f = e.target.dataset.form; if (!f) return;
+  e.preventDefault();
+  if (f === 'send') {
+    const ta = $('#composer'), t = ta.value.trim();
+    if (!t) { ta.focus(); return; }
+    (S.msgs[S.chan] = S.msgs[S.chan] || []).push({who:S.me, when:'À l’instant', text:t});
+    render();
+    const c = $('#composer'); if (c) { c.focus(); c.scrollIntoView({block:'end'}); }
+  }
+  if (f === 'addcom') {
+    const name = S.newName.trim();
+    if (!name) { S.err = 'Donnez un nom à la commission.'; render(); $('#new-com').focus(); return; }
+    if (S.commissions.some(c => norm(c.name) === norm(name))) { S.err = 'Cette commission existe déjà.'; render(); $('#new-com').focus(); return; }
+    const id = 'c' + Date.now();
+    S.commissions.push({id, name, k:S.newK});
+    S.pins[id] = 'Pas encore de message épinglé.'; S.msgs[id] = [];
+    S.newName = ''; S.err = '';
+    render();
+    toast('« ' + name + ' » créée. Elle apparaît dans l’agenda, les messages et les documents.');
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !$('#sheet').hidden) closeSheet();
+  if (e.target.id === 'composer' && e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); e.target.form.requestSubmit(); }
+});
+
+render();
+})();
+</script>
+</body>
+</html>
