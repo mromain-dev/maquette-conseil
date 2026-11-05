@@ -40,6 +40,8 @@ img{max-width:100%}
   --docs-soft:color-mix(in srgb, var(--docs) 14%, var(--surface)); --docs-text:color-mix(in srgb, var(--docs) 62%, var(--ink));
   --admin-soft:color-mix(in srgb, var(--admin) 14%, var(--surface)); --admin-text:color-mix(in srgb, var(--admin) 62%, var(--ink));
   --on-tile:#FFFFFF; --alert:#C9281F; --on-alert:#FFFFFF;
+  --shade:rgb(16 24 40 / .14); --shade-2:rgb(16 24 40 / .08); --rim:rgb(255 255 255 / .9);
+  --glass:rgb(244 245 247 / .72); --glass-bar:rgb(255 255 255 / .74);
   --font-display:"Lexend","Atkinson Hyperlegible",system-ui,sans-serif;
   --font-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
   --r:18px;
@@ -48,12 +50,16 @@ img{max-width:100%}
   :root:not([data-theme="light"]){
     --bg:#121417; --surface:#1C1F23; --surface-2:#272B30; --ink:#ECEEF1; --muted:#A4ABB4; --line:#30353B; --line-strong:#5C636B;
     --focus:#8FB2FF;
+    --shade:rgb(0 0 0 / .5); --shade-2:rgb(0 0 0 / .32); --rim:rgb(255 255 255 / .07);
+    --glass:rgb(18 20 23 / .72); --glass-bar:rgb(28 31 35 / .74);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --bg:#121417; --surface:#1C1F23; --surface-2:#272B30; --ink:#ECEEF1; --muted:#A4ABB4; --line:#30353B; --line-strong:#5C636B;
   --focus:#8FB2FF;
+    --shade:rgb(0 0 0 / .5); --shade-2:rgb(0 0 0 / .32); --rim:rgb(255 255 255 / .07);
+    --glass:rgb(18 20 23 / .72); --glass-bar:rgb(28 31 35 / .74);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -254,6 +260,41 @@ td.n{color:var(--muted)}
 .toast{position:fixed; z-index:40; left:50%; transform:translateX(-50%); bottom:calc(96px + env(safe-area-inset-bottom, 0px)); max-width:min(480px, calc(100% - 32px)); padding:12px 16px; border-radius:12px; background:var(--ink); color:var(--bg); font-weight:700; text-align:center}
 body.calm *, body.calm *::after{transition:none !important}
 @media (prefers-reduced-motion: reduce){*,*::after{transition:none !important; animation:none !important}}
+/* Relief : seulement sur ce qui se touche. Le texte et les encadrés restent plats */
+.band{background:linear-gradient(180deg, color-mix(in srgb, var(--sec) 86%, #fff) 0%, var(--sec) 55%);
+  box-shadow:inset 0 1px 0 rgb(255 255 255 / .28), 0 1px 2px var(--shade), 0 6px 16px -4px color-mix(in srgb, var(--sec) 55%, transparent);
+  transition:transform .12s, box-shadow .12s}
+.band:active{transform:translateY(2px); box-shadow:inset 0 1px 0 rgb(255 255 255 / .2), 0 1px 1px var(--shade)}
+.band .ico{box-shadow:inset 0 1px 0 rgb(255 255 255 / .3)}
+.pill-btn,.chip,.icon-btn,.ghost,.who button,.chan,.doc,.cat{box-shadow:inset 0 1px 0 var(--rim), 0 1px 1px var(--shade-2), 0 2px 6px var(--shade-2); transition:transform .12s, box-shadow .12s}
+.pill-btn:active,.chip:active,.icon-btn:active,.ghost:active,.who button:active,.chan:active,.doc:active,.cat:active{transform:translateY(1px); box-shadow:none}
+.chip[aria-pressed="true"],.who button[aria-pressed="true"],.pill-btn.no[aria-pressed="true"]{box-shadow:inset 0 1px 0 rgb(255 255 255 / .14), 0 2px 6px var(--shade)}
+.pill-btn.yes[aria-pressed="true"]{box-shadow:inset 0 1px 0 rgb(255 255 255 / .25), 0 3px 8px -2px color-mix(in srgb, var(--msg) 60%, transparent)}
+.send{box-shadow:inset 0 1px 0 rgb(255 255 255 / .25), 0 3px 8px -2px color-mix(in srgb, var(--msg) 60%, transparent); transition:transform .12s, box-shadow .12s}
+.primary{box-shadow:inset 0 1px 0 rgb(255 255 255 / .25), 0 3px 8px -2px color-mix(in srgb, var(--sec, var(--admin)) 60%, transparent); transition:transform .12s, box-shadow .12s}
+.danger{box-shadow:inset 0 1px 0 rgb(255 255 255 / .25), 0 3px 8px -2px color-mix(in srgb, var(--alert) 55%, transparent); transition:transform .12s, box-shadow .12s}
+.send:active,.primary:active,.danger:active{transform:translateY(1px); box-shadow:inset 0 1px 0 rgb(255 255 255 / .2)}
+.hue{box-shadow:0 0 0 1.5px var(--line), 0 2px 5px var(--shade-2)}
+.hue[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink), 0 2px 5px var(--shade-2)}
+.switch{box-shadow:inset 0 1px 3px var(--shade)}
+.switch::after{box-shadow:0 1px 3px var(--shade)}
+
+/* Transparence : seulement sur les barres fixes */
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:16; background:var(--bg)}
+.tabs{background:var(--glass-bar); backdrop-filter:blur(18px) saturate(1.6); -webkit-backdrop-filter:blur(18px) saturate(1.6)}
+.view-head,.thread-head{position:sticky; top:env(safe-area-inset-top, 0px); z-index:15; margin-block:0 10px; margin-inline:-16px; padding:10px 16px;
+  background:var(--glass); backdrop-filter:blur(18px) saturate(1.6); -webkit-backdrop-filter:blur(18px) saturate(1.6)}
+.composer{background:var(--glass); backdrop-filter:blur(18px) saturate(1.6); -webkit-backdrop-filter:blur(18px) saturate(1.6); margin-inline:-16px; padding-inline:16px}
+.scrim{background:rgb(0 0 0 / .35); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px)}
+.sheet{box-shadow:0 -8px 30px var(--shade)}
+.toast{box-shadow:0 6px 18px var(--shade)}
+
+/* Mode calme : ni ombre, ni flou, ni dégradé */
+body.calm .band{background:var(--sec)}
+body.calm *, body.calm *::after{box-shadow:none !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important}
+body.calm .tabs{background:var(--surface)}
+body.calm .view-head, body.calm .thread-head, body.calm .composer{background:var(--bg)}
+body.calm .hue[aria-pressed="true"]{outline:3px solid var(--ink); outline-offset:2px}
 </style>
 </head>
 <body>
